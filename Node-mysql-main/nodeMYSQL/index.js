@@ -14,15 +14,14 @@ app.use(express.urlencoded({
     extended: true
 }))
 
+// CRUD => Create, read, update and delete
+
+
 app.use(express.json())
 
 //rotas
 app.post("/register/save", (request, response) => {
     const {title, pageqty} = request.body
-    const book = {
-        title,
-        pageqty
-    }
 
     const query = 
     `INSERT INTO books (title, pageqty)
@@ -42,7 +41,19 @@ app.get("/register", (request, response) => {
 } )
 
 app.get('/', (request, response) => {
-    response.render("home")
+    const query = 'SELECT * FROM books'
+
+    conn.query(sql, (error, data) => {
+        if (error) {
+            return console.log(error)
+        }
+
+        const books = data
+
+        console.log(books)
+
+        response.render("home", {books})
+    })
 })
 
 //conexao com mysql
